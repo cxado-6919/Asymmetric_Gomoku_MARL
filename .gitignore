@@ -1,0 +1,61 @@
+# ---------------------------------
+# Anaconda / Virtual Environments
+# ---------------------------------
+# 가상환경 폴더 자체
+.venv
+venv/
+env/
+my_project_env/
+*.env
+
+# Anaconda 메타데이터
+.conda
+conda-meta/
+
+# ---------------------------------
+# Python
+# ---------------------------------
+# 컴파일된 파일
+*.pyc
+*.pyo
+*.pyd
+
+# 캐시 폴더
+__pycache__/
+
+# ---------------------------------
+# Jupyter / VS Code
+# ---------------------------------
+# Jupyter 노트북 체크포인트
+.ipynb_checkpoints
+
+# VS Code 설정 폴더
+.vscode/
+
+# IDE 메타데이터
+.idea/
+
+# ---------------------------------
+# Machine Learning Models (⭐ 중요)
+# ---------------------------------
+# 학습된 모델 가중치 파일
+*.pth
+*.pt
+*.h5
+*.pkl
+*.model
+*.pb
+*.onnx
+
+# ---------------------------------
+# 운영체제 (OS)
+# ---------------------------------
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
