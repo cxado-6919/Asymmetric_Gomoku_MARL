@@ -87,7 +87,7 @@ epochs=1000
 python scripts/demo.py device=cpu checkpoint=results/models/black_final.pt
 ```
 
-# 4. 📁 프로젝트 구조
+## 4. 📁 프로젝트 구조
 ```
 Asymmetric_Gomoku_MARL/
 ├── configs/             # (신규) 실험 설정 (.yaml 파일)
@@ -157,3 +157,54 @@ Asymmetric_Gomoku_MARL/
 
 📄 상세 컨벤션 문서 (Notion)  
 https://www.notion.so/27167d3af687803ca8c1ec0a66bbeb59?source=copy_link
+
+---
+
+## 📝 커밋 컨벤션
+**Conventional Commits** 규칙 준수
+
+- `feat:` 새 기능
+- `fix:` 버그 수정
+- `docs:` 문서 변경
+- `style:` 코드 포매팅, 세미콜론
+- `refactor:` 코드 리팩토링
+- `perf:` 성능 개선
+- `test:` 테스트 관련
+- `chore:` 빌드/배포/패키지
+- `ci:` CI 설정
+- `revert:` 이전 커밋 되돌리기
+
+**메시지 형식**
+```
+type(scope): subject
+
+body
+footer
+```
+예: `feat(auth): add JWT refresh flow`
+
+---
+
+## 🌱 Git 브랜치 네이밍 컨벤션 (요약)
+
+- **feature/** → 새로운 기능
+    
+    예) `feature/login-page`
+    
+- **fix/** → 버그 수정
+    
+    예) `fix/cart-error`
+    
+- **hotfix/** → 긴급 수정
+    
+    예) `hotfix/payment-crash`
+    
+- **refactor/** → 리팩토링
+    
+    예) `refactor/user-service`
+    
+- **docs/** → 문서 작업
+    
+    예) `docs/update-readme`
+
+---
