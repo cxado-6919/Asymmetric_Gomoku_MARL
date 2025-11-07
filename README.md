@@ -176,35 +176,26 @@ https://www.notion.so/27167d3af687803ca8c1ec0a66bbeb59?source=copy_link
 
 **메시지 형식**
 ```
-type(scope): subject
-
-body
-footer
-```
-예: `feat(auth): add JWT refresh flow`
-
+feat(agent): add PPO multi-agent training
+fix(reward): correct negative reward assignment
+perf(train): reduce inference time by caching model
 ---
 
 ## 🌱 Git 브랜치 네이밍 컨벤션 (요약)
 
-- **feature/** → 새로운 기능
-    
-    예) `feature/login-page`
-    
-- **fix/** → 버그 수정
-    
-    예) `fix/cart-error`
-    
-- **hotfix/** → 긴급 수정
-    
-    예) `hotfix/payment-crash`
-    
-- **refactor/** → 리팩토링
-    
-    예) `refactor/user-service`
-    
-- **docs/** → 문서 작업
-    
-    예) `docs/update-readme`
+- **feature/** → 새로운 기능 / 알고리즘 / 환경 추가  
+  예) `feature/ppo-agent`, `feature/gomoku-env-enhancement`
+
+- **fix/** → 버그 수정  
+  예) `fix/reward-calculation`, `fix/model-forward-error`
+
+- **hotfix/** → 긴급 수정  
+  예) `hotfix/training-crash-epoch-100`
+
+- **refactor/** → 코드 구조 개선  
+  예) `refactor/env-clean-structure`, `refactor/agent-base-class`
+
+- **docs/** → 문서 작업  
+  예) `docs/update-readme-install-guide`, `docs/add-evaluation-results`
 
 ---
