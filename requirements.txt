@@ -1,7 +1,7 @@
 # Gomoku_RL 호환성 기준
-torch==2.1.0
-torchrl==0.2.1
-tensordict==0.2.1
+# torch==2.1.0
+# torchrl==0.2.1
+# tensordict==0.2.1
 numpy<2
 
 # 프로젝트 필수 라이브러리

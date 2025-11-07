@@ -63,8 +63,8 @@ drive.mount('/content/drive')
 # 프로젝트 폴더 안에서 requirements.txt 파일로 라이브러리를 설치합니다.
 !pip install -r requirements.txt
 
-# (필요시) Colab용 CUDA PyTorch 설치 (requirements.txt에 +cu118 추가 권장)
-# !pip install torch==2.1.0+cu118 --index-url [https://download.pytorch.org/whl/cu118](https://download.pytorch.org/whl/cu118)
+# 2. (신규) PyTorch/TorchRL은 Colab의 CUDA 버전에 맞춰 별도 설치
+!pip install torch==2.1.0+cu118 torchrl==0.2.1 tensordict==0.2.1 --index-url https://download.pytorch.org/whl/cu118
 ```
 
 ### 4.Google Drive에 결과를 저장하며 학습을 실행합니다. (12시간 런타임 제한 대비)
