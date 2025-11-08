@@ -4,13 +4,11 @@ import hydra
 from omegaconf import DictConfig, OmegaConf
 import logging
 
-# --- 1. src/ 폴더의 우리 코드를 import ---
-# (이 import가 작동하려면 src/agents/에 PPO/A2C 클래스가 구현되어 있어야 합니다)
-from src.envs.gomoku_env import GomokuEnv
+from src.envs import GomokuEnv 
 from src.utils.policy import uniform_policy 
 from src.utils.misc import set_seed
-from src.agents.collectors import BlackPlayCollector, WhitePlayCollector, SelfPlayCollector
-from src.agents import get_policy  # (이 함수는 src/agents/__init__.py에 구현 필요)
+from src.collectors.collectors import BlackPlayCollector, WhitePlayCollector, SelfPlayCollector
+from src.policy import get_policy
 
 # 로거 설정
 log = logging.getLogger(__name__)
@@ -36,7 +34,7 @@ def main(cfg: DictConfig):
 
     # --- 2. 에이전트(Agent) 생성 ---
     log.info(f"--- 3. Creating Agent ({cfg.algo.name}) ---")
-    # (get_policy 함수가 PPO/A2C를 반환한다고 가정)
+    # (src.policy.get_policy 함수가 PPO/A2C를 반환)
     agent = get_policy(
         name=cfg.algo.name,
         cfg=cfg.algo, 
@@ -46,35 +44,46 @@ def main(cfg: DictConfig):
     )
 
     # --- 3. 데이터 수집기(Collector) 설정 ---
-    # (예시: '흑' 에이전트를 '무작위 봇' 상대로 학습)
-    log.info(f"--- 4. Setting up BlackPlayCollector ---")
+    log.info(f"--- 4. Setting up {cfg.collector_type} Collector ---")
     random_opponent = uniform_policy
-    collector = BlackPlayCollector(
-        env, 
-        policy_black=agent,           # 학습할 대상
-        policy_white=random_opponent  # 고정된 상대 (또는 pretrained 모델)
-    )
     
-    # (참고: cfg.collector_type == "White"일 때 WhitePlayCollector를 부르는 로직 추가 필요)
+    if cfg.collector_type == "BlackPlay":
+        collector = BlackPlayCollector(
+            env, 
+            policy_black=agent,           # 학습할 대상
+            policy_white=random_opponent  # 고정된 상대
+        )
+    elif cfg.collector_type == "WhitePlay":
+        collector = WhitePlayCollector(
+            env,
+            policy_black=random_opponent, # 고정된 상대
+            policy_white=agent            # 학습할 대상
+        )
+    elif cfg.collector_type == "SelfPlay":
+        collector = SelfPlayCollector(env, agent)
+    else:
+        raise ValueError(f"Unknown collector_type: {cfg.collector_type}")
 
     # --- 4. 학습 루프 시작 ---
     log.info(f"--- 5. Starting Training ({cfg.epochs} epochs) ---")
     
-    output_dir = hydra.utils.get_original_cwd() # Hydra가 생성한 results 폴더
-    run_dir = cfg.get("run_dir", output_dir) # Colab Google Drive 경로
+    # Colab Google Drive 경로 또는 로컬 경로
+    run_dir = cfg.get("run_dir", ".") 
     log.info(f"Results will be saved to: {run_dir}")
+    os.makedirs(run_dir, exist_ok=True) # 저장 폴더 생성
 
     for epoch in range(cfg.epochs):
         
         log.info(f"\n[Epoch {epoch+1}/{cfg.epochs}] Collecting data...")
         # 1. 데이터 수집
-        # (CPU에서는 이 rollout 단계가 매우 오래 걸릴 수 있음)
-        black_transitions, info = collector.rollout(cfg.steps_per_epoch)
+        # (cfg.collector_type에 따라 반환값이 달라질 수 있으므로, 
+        #  BlackPlayCollector 기준으로 우선 작성)
+        transitions, info = collector.rollout(cfg.steps_per_epoch)
         
         # 2. 에이전트 학습
-        if black_transitions is not None and len(black_transitions) > 0:
+        if transitions is not None and len(transitions) > 0:
             log.info(f"[Epoch {epoch+1}/{cfg.epochs}] Learning from data...")
-            info.update(agent.learn(black_transitions))
+            info.update(agent.learn(transitions))
         else:
             log.warning(f"[Epoch {epoch+1}/{cfg.epochs}] No data collected. Skipping learning.")
         
@@ -88,16 +97,17 @@ def main(cfg: DictConfig):
         
         # (참고: 모델 저장 로직 - 예: 10 에포크마다 저장)
         if (epoch + 1) % 10 == 0:
-            save_path = os.path.join(run_dir, f"black_agent_epoch_{epoch+1}.pt")
+            save_path = os.path.join(run_dir, f"{cfg.collector_type}_agent_epoch_{epoch+1}.pt")
             # torch.save(agent.state_dict(), save_path)
             # log.info(f"Model checkpoint saved to {save_path}")
 
     log.info("--- Training Finished ---")
     
     # 최종 모델 저장
-    final_save_path = os.path.join(run_dir, "black_final.pt")
+    final_save_path = os.path.join(run_dir, f"{cfg.collector_type}_agent_final.pt")
     # torch.save(agent.state_dict(), final_save_path)
     # log.info(f"Final model saved to {final_save_path}")
+
 
 if __name__ == "__main__":
     main()
