@@ -105,9 +105,8 @@ def main(cfg: DictConfig):
     
     # 최종 모델 저장
     final_save_path = os.path.join(run_dir, f"{cfg.collector_type}_agent_final.pt")
-    # torch.save(agent.state_dict(), final_save_path)
-    # log.info(f"Final model saved to {final_save_path}")
-
+    torch.save(agent.state_dict(), final_save_path)
+    log.info(f"Final model saved to {final_save_path}")
 
 if __name__ == "__main__":
     main()
