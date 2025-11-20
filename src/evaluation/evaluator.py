@@ -23,8 +23,14 @@ def evaluate_win_rate(
 
     # 1. 환경 생성 및 초기화
     env = GomokuEnv(num_envs=num_envs, board_size=board_size, device=device)
-    td = env.reset()           # {"observation", "action_mask", "done", ...}
-    done = td.get("done")      # [num_envs], 보통 전부 False
+    td = env.reset()             
+    
+    # 'done'이 없으면 모두 False로 초기화
+    if "done" in td.keys():
+        done = td.get("done")
+    else:
+        # 모든 환경이 '끝나지 않음(False)' 상태로 시작
+        done = torch.zeros(num_envs, dtype=torch.bool, device=device)
 
     first_step = True          # prev_action 방어용 플래그
 

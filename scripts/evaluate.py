@@ -2,6 +2,10 @@ import hydra
 from omegaconf import DictConfig, OmegaConf
 import logging
 import torch
+
+import warnings
+warnings.filterwarnings("ignore")
+
 from tensordict import TensorDict
 from torchrl.data.tensor_specs import (
     DiscreteTensorSpec,

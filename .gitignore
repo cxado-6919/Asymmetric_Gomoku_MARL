@@ -65,3 +65,13 @@ Desktop.ini
 environment.yml
 test.ipynb
 outputs/
+
+#---- Evaluation 폴더 설정 ----
+
+# 1. 로그 폴더: 실행 기록은 Git에 올리지 않음 (폴더만 유지)
+results/evaluation/logs/*
+!results/evaluation/logs/.gitkeep
+
+# 2. 베이스라인 폴더: 평가용 모델(.pt)은 공유 허용 (예외 처리)
+# 원래 위에서 *.pt를 막았지만, 이 폴더 안의 파일은 허용함
+!results/evaluation/baselines/*.pt
