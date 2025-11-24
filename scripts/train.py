@@ -143,8 +143,32 @@ def run_versus_play_training(cfg: DictConfig, env: GomokuEnv, run_dir: str):
         log.info(f"FPS (Data Collection): {info.get('fps', 0):.2f}")
         log.info(f"Black Win Rate: {info.get('black_win', 0):.2%}")
         log.info(f"White Win Rate: {info.get('white_win', 0):.2%}")
-        log.info(f"Black Total Loss: {info.get('black_total_loss', 'N/A')}")
-        log.info(f"White Total Loss: {info.get('white_total_loss', 'N/A')}")
+        log.info(
+            "Black Losses  - raw: %s, policy: %s, value: %s, entropy: %s",
+            learn_info_black.get("loss", "N/A"),
+            learn_info_black.get("loss_objective", "N/A"),
+            learn_info_black.get("loss_critic", "N/A"),
+            learn_info_black.get("loss_entropy", "N/A"),
+        )
+        log.info(
+            "White Losses  - raw: %s, policy: %s, value: %s, entropy: %s",
+            learn_info_white.get("loss", "N/A"),
+            learn_info_white.get("loss_objective", "N/A"),
+            learn_info_white.get("loss_critic", "N/A"),
+            learn_info_white.get("loss_entropy", "N/A"),
+        )
+        log.info(
+            "Black Grad/Adv - grad_norm: %s, adv_mean: %s, adv_std: %s",
+            learn_info_black.get("grad_norm", "N/A"),
+            learn_info_black.get("advantage_meam", "N/A"),  # 기존 오타 키 그대로 사용
+            learn_info_black.get("advantage_std", "N/A"),
+        )
+        log.info(
+            "White Grad/Adv - grad_norm: %s, adv_mean: %s, adv_std: %s",
+            learn_info_white.get("grad_norm", "N/A"),
+            learn_info_white.get("advantage_meam", "N/A"),
+            learn_info_white.get("advantage_std", "N/A"),
+        )
         log.info("------------------------------")
 
         # 5-5) 체크포인트 저장 (예: 10 에포크마다)
