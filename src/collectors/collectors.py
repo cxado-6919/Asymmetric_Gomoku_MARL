@@ -135,6 +135,17 @@ class SelfPlayCollector(Collector):
         self._augment = augment
         self._t = None
         self._t_minus_1 = None
+
+    def update_policy(self, policy: _policy_t):
+        """Update the policy used for data collection.
+
+        The cached environment state is reset so that newly collected
+        transitions reflect the latest policy parameters.
+        """
+
+        self._policy = policy
+        self.reset()
+
     def reset(self):
         
         self._env.reset()
@@ -185,6 +196,14 @@ class VersusPlayCollector(Collector):
         self._augment = augment
         self._t_minus_1 = None
         self._t = None
+
+    def update_policies(self, policy_black: _policy_t, policy_white: _policy_t):
+        """Update both players' policies and reset cached rollout state."""
+
+        self._policy_black = policy_black
+        self._policy_white = policy_white
+        self.reset()
+
     def reset(self):
         
         self._env.reset()
@@ -263,6 +282,14 @@ class BlackPlayCollector(Collector):
         self._augment = augment
         self._t_minus_1 = None
         self._t = None
+
+    def update_policies(self, policy_black: _policy_t, policy_white: _policy_t):
+        """Update the black and white policies and reset rollout cache."""
+
+        self._policy_black = policy_black
+        self._policy_white = policy_white
+        self.reset()
+
     def reset(self):
         
         self._env.reset()
@@ -332,6 +359,14 @@ class WhitePlayCollector(Collector):
         self._augment = augment
         self._t_minus_1 = None
         self._t = None
+
+    def update_policies(self, policy_black: _policy_t, policy_white: _policy_t):
+        """Update the black and white policies and reset rollout cache."""
+
+        self._policy_black = policy_black
+        self._policy_white = policy_white
+        self.reset()
+
     def reset(self):
         self._env.reset()
         self._t_minus_1 = None

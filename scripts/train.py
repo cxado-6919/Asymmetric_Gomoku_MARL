@@ -103,6 +103,16 @@ def main(cfg: DictConfig):
     else:
         raise ValueError(f"Unknown collector_type: {cfg.collector_type}")
 
+    def _refresh_collector_models():
+        """Reset collector cache so the next epoch uses the latest policies."""
+
+        if isinstance(collector, SelfPlayCollector):
+            collector.update_policy(agent)
+        elif isinstance(collector, BlackPlayCollector):
+            collector.update_policies(policy_black=agent, policy_white=opponent_policy)
+        elif isinstance(collector, WhitePlayCollector):
+            collector.update_policies(policy_black=opponent_policy, policy_white=agent)
+
     # --- 4. 학습 루프 시작 ---
     log.info(f"--- 5. Starting Training ({cfg.epochs} epochs) ---")
     
@@ -139,6 +149,9 @@ def main(cfg: DictConfig):
             save_path = os.path.join(run_dir, f"{cfg.collector_type}_agent_epoch_{epoch+1}.pt")
             # torch.save(agent.state_dict(), save_path)
             # log.info(f"Model checkpoint saved to {save_path}")
+
+        # 다음 에포크 수집 시 최신 파라미터를 사용하도록 콜렉터 상태를 초기화합니다.
+        _refresh_collector_models()
 
     log.info("--- Training Finished ---")
     
