@@ -144,7 +144,11 @@ class GomokuEnv:
                 # + 방향
                 cnt_pos = 0
                 ix, iy = x + dx, y + dy
-                while 0 <= ix < B and 0 <= iy < B and int(board_before[e, ix, iy].item()) == opp:
+                while (
+                    0 <= ix < B
+                    and 0 <= iy < B
+                    and int(board_before[e, ix, iy].item()) == opp
+                ):
                     cnt_pos += 1
                     ix += dx
                     iy += dy
@@ -152,7 +156,11 @@ class GomokuEnv:
                 # - 방향
                 cnt_neg = 0
                 ix, iy = x - dx, y - dy
-                while 0 <= ix < B and 0 <= iy < B and int(board_before[e, ix, iy].item()) == opp:
+                while (
+                    0 <= ix < B
+                    and 0 <= iy < B
+                    and int(board_before[e, ix, iy].item()) == opp
+                ):
                     cnt_neg += 1
                     ix -= dx
                     iy -= dy
@@ -249,10 +257,11 @@ class GomokuEnv:
         valid_mask = env_mask & (~illegal)
 
         # ----- 하이퍼파라미터 (필요 시 조정) -----
-        w_len_self = 0.04   # 자기 줄 늘리기
-        w_len_block = 0.06  # 상대 줄 길이 차단
-        w_block3 = 0.08     # threat-3 차단
-        w_block4 = 0.20     # threat-4 차단
+        # 공격(자기 줄 늘리기)은 살짝 약하게, 방어는 더 강하게
+        w_len_self = 0.03   # 자기 줄 늘리기 (기존 0.04 -> 0.03)
+        w_len_block = 0.08  # 상대 줄 길이 차단 (기존 0.06 -> 0.08)
+        w_block3 = 0.12     # threat-3 차단 (기존 0.08 -> 0.12)
+        w_block4 = 0.35     # threat-4 차단 (기존 0.20 -> 0.35)
 
         shaping = (
             w_len_self * delta_self_len
