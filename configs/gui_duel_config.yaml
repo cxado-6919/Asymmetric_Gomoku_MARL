@@ -1,8 +1,6 @@
-# 기본값 설정. 흑/백 알고리즘을 각각 지정할 수 있도록 분리합니다.
 defaults:
   - _self_
-  - algo_black: ppo 
-  - algo_white: ppo 
+  - algo: ppo
 
 # --- 보드 및 환경 설정 ---
 board_size: 15
